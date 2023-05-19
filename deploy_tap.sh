@@ -107,7 +107,7 @@ function update_dns {
 function create_dev_namespace {
   kubectl create ns developer
   tanzu secret registry add registry-credentials --server $LOCAL_REGISTRY_HOSTNAME --username "_json_key" --password "$(cat secrets/gcp-service-account.json)" --namespace developer
-  kubectl -n developer apply -f developer-secrets.yaml
+  kubectl -n developer apply -f templates/developer-secrets.yaml
 }
 
 function deploy_app {
