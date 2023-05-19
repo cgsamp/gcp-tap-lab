@@ -1,0 +1,49 @@
+shared:
+  ingress_domain: "tap.gcp.csamp-tanzu.com"
+
+  image_registry:
+    project_path: "us-central1-docker.pkg.dev/samp-tap/gcp-lab"
+    secret:
+      name: "tap-registry"
+      namespace: "tap-install"
+
+ceip_policy_disclosed: True
+
+namespace_provisioner:
+  controller: true
+
+profile: full
+supply_chain: basic
+
+
+tap_gui:
+#  tls:
+#    namespace: tap-gui
+#    secretName: tap-gui-cert
+  metadataStoreAutoconfiguration: true  
+  service_type: ClusterIP # If the shared.ingress_domain is set as above, this must be set to ClusterIP.
+  app_config:
+    catalog:
+      locations:
+        - type: url
+          target: "https://github.com/cgsamp/tanzu-java-web-app/blob/main/catalog-info.yaml"
+    backend:
+      baseUrl: https://tap-gui.tap.gcp.csamp-tanzu.com/
+      cors:
+        origin: https://tap-gui.tap.gcp.csamp-tanzu.com/
+      reading:
+        allow:
+          - host: 'where-for-dinner.developer.tap.gcp.csamp-tanzu.com'
+
+metadata_store:
+  ns_for_export_app_cert: developer
+  app_service_type: ClusterIP
+
+grype:
+  namespace: developer
+  targetImagePullSecret: registry-credentials
+
+excluded_packages:
+  - policy.apps.tanzu.vmware.com
+
+
